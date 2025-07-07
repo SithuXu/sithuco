@@ -1,1 +1,30 @@
+name: File Downloader & Uploader
 
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'URL to download'
+        required: true
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install tools
+        run: sudo apt update && sudo apt install -y wget curl
+
+      - name: Download the file
+        run: |
+          echo "Downloading: ${{ github.event.inputs.url }}"
+          wget "${{ github.event.inputs.url }}" -O downloaded.file
+
+      - name: Send file to Telegram group
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          curl -F document=@downloaded.file \
+               "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument?chat_id=${TELEGRAM_CHAT_ID}&caption=✅ File uploaded!"
+               
