@@ -19,11 +19,11 @@ jobs:
         run: |
           echo "Downloading: ${{ github.event.inputs.url }}"
           wget "${{ github.event.inputs.url }}" -O downloaded.file
-
       - name: Send file to Telegram group
         env:
-    TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-    TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}   # Set to your user ID (e.g., 79)
-  run: |
-    curl -F document=@downloaded.file \
-         "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument?chat_id=${TELEGRAM_CHAT_ID}&caption=✅ File uploaded!"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          curl -F document=@downloaded.file \
+               "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument?chat_id=${TELEGRAM_CHAT_ID}&caption=✅ File uploaded!"
+               
